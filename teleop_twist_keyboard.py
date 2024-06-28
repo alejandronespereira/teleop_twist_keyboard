@@ -37,6 +37,10 @@ import threading
 import geometry_msgs.msg
 import rclpy
 
+from rclpy.parameter import Parameter
+import rclpy.parameter
+from teleop_twist_keyboard.key_mapper import KeyMapper
+
 if sys.platform == 'win32':
     import msvcrt
 else:
@@ -70,36 +74,6 @@ e/c : increase/decrease only angular speed by 10%
 
 CTRL-C to quit
 """
-
-moveBindings = {
-    'i': (1, 0, 0, 0),
-    'o': (1, 0, 0, -1),
-    'j': (0, 0, 0, 1),
-    'l': (0, 0, 0, -1),
-    'u': (1, 0, 0, 1),
-    ',': (-1, 0, 0, 0),
-    '.': (-1, 0, 0, 1),
-    'm': (-1, 0, 0, -1),
-    'O': (1, -1, 0, 0),
-    'I': (1, 0, 0, 0),
-    'J': (0, 1, 0, 0),
-    'L': (0, -1, 0, 0),
-    'U': (1, 1, 0, 0),
-    '<': (-1, 0, 0, 0),
-    '>': (-1, -1, 0, 0),
-    'M': (-1, 1, 0, 0),
-    't': (0, 0, 1, 0),
-    'b': (0, 0, -1, 0),
-}
-
-speedBindings = {
-    'q': (1.1, 1.1),
-    'z': (.9, .9),
-    'w': (1.1, 1),
-    'x': (.9, 1),
-    'e': (1, 1.1),
-    'c': (1, .9),
-}
 
 
 def getKey(settings):
@@ -140,6 +114,13 @@ def main():
     # parameters
     stamped = node.declare_parameter('stamped', False).value
     frame_id = node.declare_parameter('frame_id', '').value
+    key_mappings_file = node.declare_parameter(
+        'key_mappings_file', rclpy.parameter.Parameter.Type.STRING).value
+    key_mapper = KeyMapper(key_mappings_file)
+
+    moveBindings = key_mapper.move_bindings()
+    speedBindings = key_mapper.speed_bindings()
+
     if not stamped and frame_id:
         raise Exception("'frame_id' can only be set when 'stamped' is True")
 
@@ -171,7 +152,7 @@ def main():
         twist = twist_msg
 
     try:
-        print(msg)
+        print(key_mapper.msg())
         print(vels(speed, turn))
         while True:
             key = getKey(settings)
@@ -186,7 +167,7 @@ def main():
 
                 print(vels(speed, turn))
                 if (status == 14):
-                    print(msg)
+                    print(key_mapper.msg())
                 status = (status + 1) % 15
             else:
                 x = 0.0
