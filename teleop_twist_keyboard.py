@@ -45,8 +45,6 @@ else:
     import termios
     import tty
 
-import yaml
-
 
 class KeyMapper:
 
@@ -117,8 +115,6 @@ class KeyMapper:
         }
 
     def read_keymapping(self, file):
-        ''' Read the mappings from a yaml file.'''
-
         if file is None:
             return
 
@@ -132,7 +128,8 @@ class KeyMapper:
         self._key_mappings.update(config)
 
         # Check the new mappings don't have repeated values
-        if len(list(self._key_mappings.values())) != len(set(self._key_mappings.values())):
+        if len(list(self._key_mappings.values())) \
+                != len(set(self._key_mappings.values())):
             raise RuntimeError("Repeated elements in the mappings.")
 
     def speed_bindings(self):
@@ -145,24 +142,40 @@ class KeyMapper:
         return (
             '---------------------------\n'
             'Moving around:\n'
-            f'{self._key_mappings["forward_left"]}    {self._key_mappings["forward"]}    {self._key_mappings["forward_right"]}\n'
-            f'{self._key_mappings["turn_left"]}         {self._key_mappings["turn_right"]}\n'
-            f'{self._key_mappings["backward_left"]}    {self._key_mappings["backward"]}    {self._key_mappings["backward_right"]}\n'
+            f'{self._key_mappings["forward_left"]}    '
+            f'{self._key_mappings["forward"]}    '
+            f'{self._key_mappings["forward_right"]}\n'
+            f'{self._key_mappings["turn_left"]}         '
+            f'{self._key_mappings["turn_right"]}\n'
+            f'{self._key_mappings["backward_left"]}    '
+            f'{self._key_mappings["backward"]}    '
+            f'{self._key_mappings["backward_right"]}\n'
             '\n'
             'For Holonomic mode (strafing), hold down the shift key:\n'
             '---------------------------\n'
-            f'{self._key_mappings["forward_left_strafe"]}    {self._key_mappings["forward_strafe"]}    {self._key_mappings["forward_right_strafe"]}\n'
-            f'{self._key_mappings["strafe_left"]}         {self._key_mappings["strafe_right"]}\n'
-            f'{self._key_mappings["backward_left_strafe"]}    {self._key_mappings["backward_strafe"]}    {self._key_mappings["backward_right_strafe"]}\n'
+            f'{self._key_mappings["forward_left_strafe"]}    '
+            f'{self._key_mappings["forward_strafe"]}    '
+            f'{self._key_mappings["forward_right_strafe"]}\n'
+            f'{self._key_mappings["strafe_left"]}         '
+            f'{self._key_mappings["strafe_right"]}\n'
+            f'{self._key_mappings["backward_left_strafe"]}    '
+            f'{self._key_mappings["backward_strafe"]}    '
+            f'{self._key_mappings["backward_right_strafe"]}\n'
             '\n'
             f'{self._key_mappings["up"]} : up (+z)\n'
             f'{self._key_mappings["down"]} : down (-z)\n'
             '\n'
             'anything else : stop\n'
             '\n'
-            f'{self._key_mappings["speed_up"]}/{self._key_mappings["speed_down"]} : increase/decrease max speeds by 10%\n'
-            f'{self._key_mappings["linear_speed_up"]}/{self._key_mappings["linear_speed_down"]} : increase/decrease only linear speed by 10%\n'
-            f'{self._key_mappings["angular_speed_up"]}/{self._key_mappings["angular_speed_down"]} : increase/decrease only angular speed by 10%\n'
+            f'{self._key_mappings["speed_up"]}/'
+            f'{self._key_mappings["speed_down"]} : '
+            'increase/decrease max speeds by 10%\n'
+            f'{self._key_mappings["linear_speed_up"]}/'
+            f'{self._key_mappings["linear_speed_down"]} : '
+            'increase/decrease only linear speed by 10%\n'
+            f'{self._key_mappings["angular_speed_up"]}/'
+            f'{self._key_mappings["angular_speed_down"]} : '
+            'increase/decrease only angular speed by 10%\n'
             '\n'
             'CTRL-C to quit\n')
 
