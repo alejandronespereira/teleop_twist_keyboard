@@ -40,7 +40,9 @@ e/c : increase/decrease only angular speed by 10%
 
 CTRL-C to quit
 
-A .yaml file can be provided to change the bindings above. Examples are provided in the config file for the default configuration and one with a WASD like mapping.
+A .yaml file can be provided to change the bindings above.
+Examples are provided in the config file for the default
+configuration and one with a WASD like mapping.
 
 ```
 
